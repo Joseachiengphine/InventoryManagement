@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
+    protected $guarded = ['customer_id'];
+
+    protected $table = 'customers';
+
+    protected $primaryKey = 'customer_id';
 
     public function Order(): BelongsTo
     {
