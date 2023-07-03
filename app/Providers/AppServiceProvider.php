@@ -30,10 +30,7 @@ class AppServiceProvider extends ServiceProvider
 //        });
 
 Filament::registerNavigationGroups([
-    'Customers',
-    'Orders',
-    'Products',
-    'Suppliers',
+    'SHOP',
     'SETTINGS',
 ]);
 
