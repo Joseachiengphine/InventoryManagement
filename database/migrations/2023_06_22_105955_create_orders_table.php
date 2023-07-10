@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('order_id')->nullable(false);
+            $table->integer('order_number')->nullable(false);
             $table->unsignedInteger('customer_id')->nullable(false);
             $table->foreign('customer_id')->references('customer_id')->on('customers');
             $table->date('order_date')->nullable(false);
             $table->date('delivery_date')->nullable(false);
             $table->integer('amount')->nullable(false);
             $table->integer('quantity')->nullable(false);
-            $table->enum('status', ['PENDING', 'PAID', 'CANCELLED']);
+            $table->enum('status', ['new', 'processing', 'shipped', 'delivered', 'cancelled']);
+            $table->enum('means_of_delivery', ['company', 'self']);
             $table->timestamps();
         });
     }

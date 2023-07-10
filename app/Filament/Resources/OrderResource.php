@@ -6,6 +6,9 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use Filament\Forms;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -26,23 +29,32 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('order_date')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('delivery_date')
-                    ->tel()
+                Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('order_number')
+                            ->label('Order Number')
+                        ->numeric(),
+                        Forms\Components\Select::make('customer.name')
+                        ->required(),
+                        Select::make('status')
+                            ->options([
+                                'new' => 'New',
+                                'processing' => 'Processing',
+                                'shipped' => 'Shipped',
+                                'delivered' => 'Delivered',
+                                'cancelled' => 'Cancelled',
+                            ]),
+                        Forms\Components\TextInput::make('delivery_date')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
-                    ->email()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('quantity')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('status')
-                    ->required()
-                    ->maxLength(255),
+
+                    ]),
             ]);
     }
 
@@ -70,14 +82,14 @@ class OrderResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -85,5 +97,5 @@ class OrderResource extends Resource
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
-    }    
+    }
 }

@@ -23,6 +23,7 @@ use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use App\Filament\Resources\CustomerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CustomerResource\RelationManagers;
+use Ysfkaya\FilamentPhoneInput\PhoneInput;
 
 class CustomerResource extends Resource
 {
@@ -32,7 +33,6 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationGroup = 'SHOP';
 
-
     public static function form(Form $form): Form
     {
         return $form
@@ -41,23 +41,21 @@ class CustomerResource extends Resource
             ->schema([
             Fieldset::make('Personal Details')
                         ->schema([
-        Forms\Components\TextInput::make('name')
-        ->label('Customer/Company Name')
-        ->required()
-        ->maxLength(255),
-        Forms\Components\TextInput::make('email')
-        ->email()
-        ->required()
-        ->maxLength(255),
-        Forms\Components\TextInput::make('phoneNumber')
-        ->tel()
-        ->required()
-        ->maxLength(255),
+                            Forms\Components\TextInput::make('name')
+                                ->label('Customer/Company Name')
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->maxLength(255),
+                            PhoneInput::make('phoneNumber')
+                                ->autoPlaceholder('polite')
+                                ->initialCountry('ke')
+                                ->required()
 
-                            ])
-                            ->columns(2)
-                            ->inlineLabel(),
-
+                        ])
+                ->columns(2),
                 Fieldset::make('Address Details')
                 ->schema([
         Forms\Components\TextInput::make('country')
@@ -79,10 +77,10 @@ class CustomerResource extends Resource
                         Forms\Components\TextInput::make('recievables')
                         ->required()
                         ->maxLength(255),
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\MarkdownEditor::make('description')
                         ->required()
                         ->maxLength(65535)
-                        ->cols(30),
+                            ->columnSpan('full'),
                     ])
                 ]),
                     ]);
@@ -96,7 +94,8 @@ class CustomerResource extends Resource
                 ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('email')
                 ->searchable(isIndividual: true),
-                Tables\Columns\TextColumn::make('phoneNumber'),
+                Tables\Columns\TextColumn::make('phoneNumber')
+                ,
                 Tables\Columns\TextColumn::make('description')
                 ->searchable()
                     ->toggleable()
